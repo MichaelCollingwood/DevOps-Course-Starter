@@ -3,6 +3,8 @@ from os import getenv
 from flask import session
 import requests
 
+from todo_app.domain.item import Item
+
 # use env var for prefix
 cards_url = "https://api.trello.com/1/cards"
 board_url = "https://api.trello.com/1/boards/65c4fed365273e251af75aa5"
@@ -29,7 +31,7 @@ def get_list_organised_items():
         headers=headers,
         params=query
     )
-    items = json.loads(items_response.text)
+    items = [Item.from_trello_card(item) for item in json.loads(items_response.text)]
 
     lists_response = requests.request(
         "GET",
@@ -39,10 +41,7 @@ def get_list_organised_items():
     )
     list_organised_items = [{
         "name": list["name"],
-        "entries": [{
-            "id": item["id"],
-            "name": item["name"],
-            } for item in items if item["idList"] == list["id"]]
+        "entries": [item for item in items if item.list_id == list["id"]]
         } for list in json.loads(lists_response.text) ]
 
     return list_organised_items
