@@ -10,7 +10,7 @@ app.config.from_object(Config())
 
 @app.route('/')
 def index():
-    return render_template('index.html', list_organised_items=get_list_organised_items(), lists=get_lists())
+    return render_template('index.html', lists=get_lists(), list_organised_items=get_list_organised_items())
 
 @app.route('/createTodo', methods=['POST'])
 def create_todo():

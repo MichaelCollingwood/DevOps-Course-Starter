@@ -31,7 +31,7 @@ def get_list_organised_items():
         headers=headers,
         params=query
     )
-    items = [Item.from_trello_card(item) for item in json.loads(items_response.text)]
+    items = json.loads(items_response.text)
 
     lists_response = requests.request(
         "GET",
@@ -41,7 +41,7 @@ def get_list_organised_items():
     )
     list_organised_items = [{
         "name": list["name"],
-        "entries": [item for item in items if item.list_id == list["id"]]
+        "entries": [Item.from_trello_card(item, list) for item in items if item["idList"] == list["id"]]
         } for list in json.loads(lists_response.text) ]
 
     return list_organised_items
