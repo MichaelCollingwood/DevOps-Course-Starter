@@ -18,12 +18,12 @@ query = {
     'token': getenv('TRELLO_API_TOKEN')
 }
 
-def get_list_organised_items():
+def get_items():
     """
-    Fetches all saved items for each status in the trello board.
+    Fetches all saved items in the trello board.
 
     Returns:
-        list: The list of list names with corresponding items.
+        list: The list of all items.
     """
     items_response = requests.request(
         "GET",
@@ -31,27 +31,15 @@ def get_list_organised_items():
         headers=headers,
         params=query
     )
-    items = json.loads(items_response.text)
-
-    lists_response = requests.request(
-        "GET",
-        f"{board_url}/lists",
-        headers=headers,
-        params=query
-    )
-    list_organised_items = [{
-        "name": list["name"],
-        "entries": [Item.from_trello_card(item, list) for item in items if item["idList"] == list["id"]]
-        } for list in json.loads(lists_response.text) ]
-
-    return list_organised_items
+    
+    return [Item.from_trello_card(item) for item in json.loads(items_response.text)]
 
 def get_lists():
-    """
-    Fetch all lists in board
+    """ 
+    Fetches all saved lists in the trello board.
 
     Returns:
-        list: list of lists in the board
+        list: The list of all lists.
     """
     lists_response = requests.request(
         "GET",
@@ -59,7 +47,7 @@ def get_lists():
         headers=headers,
         params=query
     )
-    
+
     return json.loads(lists_response.text)
 
 def update_item_status(item_id, list_id):
