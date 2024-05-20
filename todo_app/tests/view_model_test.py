@@ -33,26 +33,26 @@ def test_view_model_list_organised_items_returns_correct_object():
     # Assert
     assert result == [
         {
-            "id": 1,
-            "name": "some list",
+            "id": "list-id-1",
+            "name": "To Do",
             "entries": [
-                Item("item-id-1", "Example Name"),
-                Item("item-id-2", "Another Name"),
+                items[0],
+                items[1],
             ]
         },
         {
-            "id": 2,
-            "name": "doing",
+            "id": "list-id-2",
+            "name": "Doing",
             "entries": [
-                Item("item-id-3", "Doing Item Name"),
+                items[2],
             ]
         },
         {
-            "id": 3,
-            "name": "done",
+            "id": "list-id-3",
+            "name": "Done",
             "entries": [
-                Item("item-id-4", "Done Item Name"),
-                Item("item-id-5", "Another Done Item Name"),
+                items[3],
+                items[4],
             ]
         },
     ]
@@ -65,7 +65,7 @@ def test_view_model_todo_items_returns_correct_items():
     result = view_model.todo_items
 
     # Assert
-    assert len(result) == 3
+    assert len(result) == 2
     assert result[0].id == "item-id-1"
     assert result[1].id == "item-id-2"
 

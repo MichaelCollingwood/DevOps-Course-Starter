@@ -1,13 +1,12 @@
 import json
 from os import getenv
-from flask import session
+import os
 import requests
 
 from todo_app.domain.item import Item
 
 # use env var for prefix
 cards_url = "https://api.trello.com/1/cards"
-board_url = "https://api.trello.com/1/boards/65c4fed365273e251af75aa5"
 todo_list_id = "65c4fed42c4a7016163343f9"
 
 headers = {
@@ -25,9 +24,10 @@ def get_items():
     Returns:
         list: The list of all items.
     """
+    board_id = os.environ.get('TRELLO_BOARD_ID')
     items_response = requests.request(
         "GET",
-        f"{board_url}/cards",
+        f"https://api.trello.com/1/boards/{board_id}/cards",
         headers=headers,
         params=query
     )
@@ -41,9 +41,10 @@ def get_lists():
     Returns:
         list: The list of all lists.
     """
+    board_id = os.environ.get('TRELLO_BOARD_ID')
     lists_response = requests.request(
         "GET",
-        f"{board_url}/lists",
+        f"https://api.trello.com/1/boards/{board_id}/lists",
         headers=headers,
         params=query
     )
@@ -66,9 +67,6 @@ def update_item_status(item_id, list_id):
         headers=headers,
         params=update_item_status_query
     )
-
-    print("response")
-    print(response.content)
 
     return response
 

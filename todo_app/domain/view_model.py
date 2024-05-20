@@ -1,6 +1,3 @@
-from todo_app.domain.item import Item
-
-
 class ViewModel:
     def __init__(self, items, lists):
         self._list_organised_items = [{
@@ -17,17 +14,17 @@ class ViewModel:
     @property
     def todo_items(self):
         for list_and_items in self._list_organised_items:
-            if list_and_items.name == "To Do":
-                return list_and_items.entries
+            if list_and_items["name"] == "To Do":
+                return list_and_items["entries"]
     
     @property
     def doing_items(self):
         for list_and_items in self._list_organised_items:
-            if list_and_items.name == "Doing":
-                return list_and_items.entries
+            if list_and_items["name"] == "Doing":
+                return list_and_items["entries"]
             
     @property
     def done_items(self):
         for list_and_items in self._list_organised_items:
-            if list_and_items.name == "Done":
-                return list_and_items.entries
+            if list_and_items["name"] == "Done":
+                return list_and_items["entries"]

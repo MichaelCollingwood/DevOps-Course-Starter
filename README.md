@@ -61,5 +61,5 @@ Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser
 ## Running Tests
 You can run pytest tests by running this in the project directory:
 ```bash
-pytest
+poetry run pytest
 ```
