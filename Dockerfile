@@ -29,4 +29,6 @@ CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0"]
 
 FROM base as test
 
-ENTRYPOINT poetry run pytest
+ENV PYTHONPATH=/app
+
+CMD ["poetry", "run", "pytest"]

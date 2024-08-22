@@ -1,5 +1,13 @@
 name: Continuous Integration
-on: [push]
+on:
+  push:
+    paths-ignore:
+      - 'README.md'
+      - 'architecture/**'
+  pull_request:
+    paths-ignore:
+      - 'README.md'
+      - 'architecture/**'
 
 jobs:
   build:
@@ -7,4 +15,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - run: echo Hello World
+    - run: docker build --target test --tag todo-app:test .
+    - run: docker run todo-app:test
