@@ -12,11 +12,13 @@ EXPOSE 5000
 
 COPY . /app
 
+
 FROM base as production
 
 ENV FLASK_ENV=production
 
 CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0"]
+
 
 FROM base as development
 
