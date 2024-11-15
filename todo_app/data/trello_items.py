@@ -1,13 +1,12 @@
 import json
 from os import getenv
-from flask import session
+import os
 import requests
 
 from todo_app.domain.item import Item
 
 # use env var for prefix
 cards_url = "https://api.trello.com/1/cards"
-board_url = "https://api.trello.com/1/boards/65c4fed365273e251af75aa5"
 todo_list_id = "65c4fed42c4a7016163343f9"
 
 headers = {
@@ -18,48 +17,38 @@ query = {
     'token': getenv('TRELLO_API_TOKEN')
 }
 
-def get_list_organised_items():
+def get_items():
     """
-    Fetches all saved items for each status in the trello board.
+    Fetches all saved items in the trello board.
 
     Returns:
-        list: The list of list names with corresponding items.
+        list: The list of all items.
     """
+    board_id = os.environ.get('TRELLO_BOARD_ID')
     items_response = requests.request(
         "GET",
-        f"{board_url}/cards",
-        headers=headers,
-        params=query
-    )
-    items = json.loads(items_response.text)
-
-    lists_response = requests.request(
-        "GET",
-        f"{board_url}/lists",
-        headers=headers,
-        params=query
-    )
-    list_organised_items = [{
-        "name": list["name"],
-        "entries": [Item.from_trello_card(item, list) for item in items if item["idList"] == list["id"]]
-        } for list in json.loads(lists_response.text) ]
-
-    return list_organised_items
-
-def get_lists():
-    """
-    Fetch all lists in board
-
-    Returns:
-        list: list of lists in the board
-    """
-    lists_response = requests.request(
-        "GET",
-        f"{board_url}/lists",
+        f"https://api.trello.com/1/boards/{board_id}/cards",
         headers=headers,
         params=query
     )
     
+    return [Item.from_trello_card(item) for item in json.loads(items_response.text)]
+
+def get_lists():
+    """ 
+    Fetches all saved lists in the trello board.
+
+    Returns:
+        list: The list of all lists.
+    """
+    board_id = os.environ.get('TRELLO_BOARD_ID')
+    lists_response = requests.request(
+        "GET",
+        f"https://api.trello.com/1/boards/{board_id}/lists",
+        headers=headers,
+        params=query
+    )
+
     return json.loads(lists_response.text)
 
 def update_item_status(item_id, list_id):
@@ -78,9 +67,6 @@ def update_item_status(item_id, list_id):
         headers=headers,
         params=update_item_status_query
     )
-
-    print("response")
-    print(response.content)
 
     return response
 

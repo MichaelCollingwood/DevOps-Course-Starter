@@ -9,7 +9,7 @@
 
   <div class="row">
     <div class="col-md-12">
-      {% for list_and_items in list_organised_items %}
+      {% for list_and_items in view_model.list_organised_items %}
         <h3>{{ list_and_items.name }}</h3>
         <ul class="list-group mb-4">
           {% for item in list_and_items.entries %}
@@ -18,7 +18,7 @@
               <form id="item-form-{{ item.id }}" action="/updateStatus" method="post">
                 <input type="hidden" name="itemId" value="{{ item.id }}"/>
                 <select name="listId" form="item-form-{{ item.id }}">
-                  {% for list in lists %}
+                  {% for list in view_model.list_organised_items %}
                     <option value="{{ list.id }}">{{ list.name }}</option>
                   {% endfor %}
                 </select>
