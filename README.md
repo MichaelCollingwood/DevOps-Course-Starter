@@ -79,7 +79,7 @@ docker build --target production --tag todo-app:prod .
 ### Run the Application
 Development (with live reloading):
 ```bash
-docker run --env-file .env -p 5000:5000 -v /todo_app todo-app:dev
+docker run --env-file .env -p 5000:5000 -v ./todo_app:/app/todo_app todo-app:dev
 ```
 
 Production:
