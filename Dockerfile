@@ -26,3 +26,9 @@ ENV FLASK_DEBUG=1
 VOLUME ["/app"]
 
 CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0"]
+
+FROM base as test
+
+ENV PYTHONPATH=/app
+
+CMD ["poetry", "run", "pytest"]
