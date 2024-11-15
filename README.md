@@ -76,6 +76,23 @@ Production:
 docker build --target production --tag todo-app:prod .
 ```
 
+Test:
+```bash
+docker build --target test --tag todo-app:test .
+```
+
+#### Building for Azure
+(v, v painful to learn)
+Azure requires `amd64` architecture compatibility. So we need to run this build command instead:
+```bash
+docker build --platform linux/amd64 --target production --tag <docker username>/<image name>:prod .
+```
+
+You can check the architecture with this:
+```bash
+docker image inspect <docker username>/<image name>:prod
+```
+
 ### Run the Application
 Development (with live reloading):
 ```bash
@@ -86,3 +103,37 @@ Production:
 ```bash
 docker run --env-file .env -p 5000:5000 todo-app:prod
 ```
+
+Tests:
+```bash
+docker run --env-file .env -p 5000:5000 todo-app:test
+```
+
+## Deploying
+
+Push the image to docker.io.
+```bash
+docker push mikecollingwood/my-todo-app:prod
+```
+
+> This is the deployed docker image: `docker.io/mikecollingwood/my-todo-app:prod`
+
+Once it's deployed, create the service plan:
+```bash
+az appservice plan create --resource-group cohort32-33_MikCol_ProjectExercise -n my-first-app-service-plan --sku B1 --is-linux
+```
+
+Then the web-app:
+```bash
+az webapp create --resource-group cohort32-33_MikCol_ProjectExercise --plan my-first-app-service-plan --name mikecollingwood-my-todo-app-web-app --deployment-container-image-name docker.io/mikecollingwood/my-todo-app:prod
+```
+
+and update the env vars:
+```bash
+az webapp config appsettings set -g cohort32-33_MikCol_ProjectExercise -n mikecollingwood-my-todo-app-web-app --settings FLASK_APP=todo_app/app SECRET_KEY=secret-key TRELLO_BOARD_ID=xxx TRELLO_API_KEY=xxx TRELLO_API_TOKEN=xxx WEBSITES_PORT=5000
+```
+
+where:
+- `cohort32-33_MikCol_ProjectExercise` is my resource group
+- `mikecollingwood/my-todo-app:prod` is the image name (`prod` being the tag)
+
