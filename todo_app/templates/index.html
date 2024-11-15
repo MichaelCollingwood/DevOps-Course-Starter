@@ -9,12 +9,25 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h2>Items</h2>
-      <ul class="list-group mb-4">
-        {% for item in items %}
-          <li>{{ item.title }}</li>
-        {% endfor %}
-      </ul>
+      {% for list_and_items in list_organised_items %}
+        <h3>{{ list_and_items.name }}</h3>
+        <ul class="list-group mb-4">
+          {% for item in list_and_items.entries %}
+            <li>
+              <p>{{ item.name }}</p>
+              <form id="item-form-{{ item.id }}" action="/updateStatus" method="post">
+                <input type="hidden" name="itemId" value="{{ item.id }}"/>
+                <select name="listId" form="item-form-{{ item.id }}">
+                  {% for list in lists %}
+                    <option value="{{ list.id }}">{{ list.name }}</option>
+                  {% endfor %}
+                </select>
+                <button type="submit">Update</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endfor %}
       <form action="/createTodo" method="post">
         New todo: <input name="title" />
       </form>
