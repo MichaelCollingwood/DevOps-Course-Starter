@@ -63,3 +63,26 @@ You can run pytest tests by running this in the project directory:
 ```bash
 poetry run pytest
 ```
+
+## Building and Running with Docker
+### Build Docker Images
+Development:
+```bash
+docker build --target development --tag todo-app:dev .
+```
+
+Production:
+```bash
+docker build --target production --tag todo-app:prod .
+```
+
+### Run the Application
+Development (with live reloading):
+```bash
+docker run --env-file .env -p 5000:5000 -v ./todo_app:/app/todo_app todo-app:dev
+```
+
+Production:
+```bash
+docker run --env-file .env -p 5000:5000 todo-app:prod
+```
