@@ -5,5 +5,5 @@ class Item:
         self.list_id = list_id
 
     @classmethod
-    def from_trello_card(cls, card):
-        return cls(card['id'], card['name'], card["idList"])
+    def from_stored_item(cls, card):
+        return cls(card['_id'], card['title'], card["status"])
