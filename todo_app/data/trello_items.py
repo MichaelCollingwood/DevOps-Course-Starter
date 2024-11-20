@@ -32,7 +32,7 @@ def get_items():
         params=query
     )
     
-    return [Item.from_trello_card(item) for item in json.loads(items_response.text)]
+    return [Item.from_stored_item(item) for item in json.loads(items_response.text)]
 
 def get_lists():
     """ 

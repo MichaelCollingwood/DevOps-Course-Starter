@@ -1,4 +1,9 @@
 class ViewModel:
+    available_lists = [{
+        "id": status,
+        "name": status
+    } for status in ['To Do', 'Doing', 'Done']]
+
     def __init__(self, items, lists):
         self._list_organised_items = [{
             "id": list["id"],
@@ -28,3 +33,5 @@ class ViewModel:
         for list_and_items in self._list_organised_items:
             if list_and_items["name"] == "Done":
                 return list_and_items["entries"]
+            
+    
