@@ -38,6 +38,6 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/todo-app:prod
       - name: Trigger Azure Deployment
         run: |
-          curl -X POST ${{ secrets.AZURE_WEBHOOK_URL }}
+          curl -X POST '${{ secrets.AZURE_WEBHOOK_URL }}'
         env:
           AZURE_WEBHOOK_URL: ${{ secrets.AZURE_WEBHOOK_URL }}
